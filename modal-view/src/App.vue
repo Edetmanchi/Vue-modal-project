@@ -1,47 +1,55 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-// import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <!-- <TheWelcome /> -->
-  </main>
+  <div>
+    <h1>Reflex Timer Game</h1>
+    <button @click="start" :disabled='isPlaying' class="play">Play</button>
+      <Block v-if="isPlaying" :delay="delay" @end='endGame'/>
+      <p v-if="showResult">Your Reaction time is {{score}} ms</p>
+  </div>
 </template>
 
+<script >
+import Block from './components/Block.vue'
+  export default{
+    components: {Block},
+    data(){
+     return {
+       isPlaying: false,
+       delay: null,
+       score: null,
+       showResult: false
+    }
+    },
+    methods:{
+      start (){
+        this.isPlaying = true,
+        this.delay = 2000 + Math.random() + 4000
+        this.showResult=false
+      },
+      endGame(reactionTime){
+        this.score = reactionTime,
+        this.isPlaying = false
+        this.showResult= true
+      }
+    }
+  }
+</script>
+
+
+
+
 <style scoped>
-header {
-  line-height: 1.5;
+ h1 {
+  font-size: 50px;
+  text-align: center;
 }
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.play{
+  padding: 5px 20px;
+  border: 2px gray solid;
 }
-
+.disabled{
+  border: 1px black;
+}
 @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+  
 }
 </style>
